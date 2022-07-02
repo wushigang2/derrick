@@ -14,8 +14,8 @@ derrick
 ```
 ```sh
 commands:
- encode      encode a file
- decode      decode a file
+ encode      encode a file.
+ decode      decode a file.
 ```
 
 # encode a file
@@ -28,7 +28,7 @@ usage: derrick encode [options] <input file>
  -n <int>    n of rs(n,k), n = 2^N - 1, N = 8/10/12/14/16, [255]
  -k <int>    k of rs(n,k), [235]
  -s <int>    number of symbol(or call rs) per segment(or call block), [62]
- -v          verbose
+ -v          verbose.
 ```
 
 # decode a file
@@ -59,7 +59,7 @@ usage: derrick decode [options] <input file>
  -b <int>    beg block, [0]
  -e <int>    end block, [0]
  -f <int>    shift or not, [1]
- -v          verbose
+ -v          verbose.
 ```
 
 # Contact
