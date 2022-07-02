@@ -1,5 +1,5 @@
 # derrick
-derrick is a tool for DNA storage encode/decode
+derrick is a tool for DNA storage encode/decode.
 
 # Installation
 ```sh
