@@ -61,7 +61,7 @@ usage: derrick decode [options] <input file>
  -f <int>    shift or not, [1]
  -v          verbose.
 ```
-#Sequencing results
+# Sequencing results
 All  raw data is available at 
 
 # Contact
