@@ -29,6 +29,8 @@ usage: derrick encode [options] <input file>
  -k <int>    k of rs(n,k), [235]
  -s <int>    number of symbol(or call rs) per segment(or call block), [62]
  -v          verbose.
+ for example: use rs(1023,991) to encode a file, each block has 100 rs.
+ derrick encode -i pi.txt -n 1023 -k 991 -s 100 <input file>
 ```
 
 # decode a file
@@ -60,6 +62,8 @@ usage: derrick decode [options] <input file>
  -e <int>    end block, [0]
  -f <int>    shift or not, [1]
  -v          verbose.
+ for example: use rs(1023,991) to decode an encoded file, each block has 100 rs.
+ derrick decode -i pi.txt -n 1023 -k 991 -s 100 <input file>
 ```
 # Sequencing results
 All  raw data is available at 
