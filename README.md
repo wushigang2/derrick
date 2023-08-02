@@ -66,7 +66,7 @@ usage: derrick decode [options] <input file>
  derrick decode -i pi.txt -n 1023 -k 991 -s 100 <encoded file>
 ```
 # Sequencing results
-All  raw data is available at 
+All  raw data is available at https://github.com/wushigang2/derrick/tree/main/data_files_insilico/
 
 # Contact
 Shigang Wu wushigang@caas.cn
