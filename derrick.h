@@ -487,9 +487,12 @@ void add_rs(struct ENCODEFILE *ef)
 
 struct DECODEFILE
 {
-        int n, k, nuss, mat, mis, gapo, gape, maxchange, maxdelete, mode, jump, upper, lower, raise, timeout, hasref, useref, begblock, endblock, ver, hrm, nblocks;
+        int n, k, nuss, mat, mis, gapo, gape, maxchange, maxdelete, mode, jump, upper, lower, raise, timeout, allowed, hasref, useref, begblock, endblock, ver, hrm, nblocks;
 	clock_t start, finish;
 	double time;
+	int number;
+	int diff;
+	int last;
         u1i *tseq, *qseq, *qlts, *Rseq;
 	int  tlen,  qlen,  qltl,  Rlen;
 	struct rs1 *rs1;
@@ -510,7 +513,7 @@ struct DECODEFILE
 	u1i *buffer1, *buffer2, *buffer3;
 };
 
-struct DECODEFILE * init_df(int n, int k, int nuss, int mat, int mis, int gapo, int gape, int maxchange, int maxdelete, int mode, int jump, int upper, int lower, int raise, int timeout, int begblock, int endblock, int ver, int hrm, int nblocks)
+struct DECODEFILE * init_df(int n, int k, int nuss, int mat, int mis, int gapo, int gape, int maxchange, int maxdelete, int mode, int jump, int upper, int lower, int raise, int timeout, int allowed, int begblock, int endblock, int ver, int hrm, int nblocks)
 {
 	struct DECODEFILE *df;
 	int i, j, k1, k2;
@@ -553,6 +556,8 @@ struct DECODEFILE * init_df(int n, int k, int nuss, int mat, int mis, int gapo, 
 	df->lower = lower;
 	df->raise = raise;
 	df->timeout = timeout;
+	df->allowed = allowed;
+	df->last = df->nuss;
 	df->hasref = 0;
 	df->begblock = begblock;
         df->endblock = endblock;
@@ -1750,6 +1755,8 @@ int decode_block(struct DECODEFILE *df, struct ARTICLE *article, int bid)
 {
 	df->start = clock();
 	df->time = 0;
+	df->number = 0;
+	df->diff = 0;
 	df->useref = 0;
 	int i, j;
 	for(i = bid * df->n; i < (bid + 1) * df->n; i++)
@@ -1767,7 +1774,7 @@ int decode_block(struct DECODEFILE *df, struct ARTICLE *article, int bid)
 	{
 		if(decode_rs(df, article, bid, i) != 0)
                 {
-			if(df->time > df->timeout)
+			if(df->time > df->timeout || df->number > df->allowed)
 			{
 				if(df->hasref == 1)
 				{
@@ -1778,6 +1785,7 @@ int decode_block(struct DECODEFILE *df, struct ARTICLE *article, int bid)
 					}
 					df->start = clock();
 					df->time = 0;
+					df->number = 0;
 					df->useref = 1;
 				}
 				else
@@ -1800,6 +1808,12 @@ int decode_block(struct DECODEFILE *df, struct ARTICLE *article, int bid)
 					if(df->ver >= 1)
 					{
 						//fprintf(stderr, "rs error then recall rs:%d\n", j);
+					}
+					df->number++;
+					if(df->last != j)
+					{
+						df->last = j;
+						df->diff++;
 					}
 					for(j = j + 1; j < df->nuss; j++)
 					{
@@ -1826,6 +1840,7 @@ int decode_block(struct DECODEFILE *df, struct ARTICLE *article, int bid)
                                         		}
 							df->start = clock();
 							df->time = 0;
+							df->number = 0;
 							df->useref = 1;
 						}
 						else
@@ -1840,6 +1855,12 @@ int decode_block(struct DECODEFILE *df, struct ARTICLE *article, int bid)
 						if(df->ver >= 1)
 						{
 							//fprintf(stderr, "rs error then recall rs:%d\n", j);
+						}
+						df->number++;
+						if(df->last != j)
+						{
+							df->last = j;
+							df->diff++;
 						}
 					}
 				}
@@ -1862,6 +1883,12 @@ int decode_block(struct DECODEFILE *df, struct ARTICLE *article, int bid)
 					if(df->ver >= 1)
 					{
 						fprintf(stderr, "crc64 error then recall rs:%d\n", j);
+					}
+					df->number++;
+					if(df->last != j)
+					{
+						df->last = j;
+						df->diff++;
 					}
 					article->crc64_times++;
 					for(j = j + 1; j < df->nuss; j++)
@@ -1889,6 +1916,7 @@ int decode_block(struct DECODEFILE *df, struct ARTICLE *article, int bid)
                                         		}
 							df->start = clock();
 		                                        df->time = 0;
+							df->number = 0;
 							df->useref = 1;
 						}
 						else
@@ -1903,6 +1931,12 @@ int decode_block(struct DECODEFILE *df, struct ARTICLE *article, int bid)
 						if(df->ver >= 1)
 						{
 							fprintf(stderr, "crc64 error then recall rs:%d\n", j);
+						}
+						df->number++;
+						if(df->last != j)
+						{
+							df->last = j;
+							df->diff++;
 						}
 						article->crc64_times++;
 					}

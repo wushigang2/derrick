@@ -252,7 +252,8 @@ int usage_decode()
 	" -u <int>    search upper range of candidate, [255]\n"
 	" -l <int>    search lower range of candidate, [32]\n"
 	" -r <int>    search raise range of candidate, [0]\n"
-	" -t <int>    how many seconds a block timeout, [3600]\n"
+	" -t <int>    how many seconds a block timeout, [6000]\n"
+	" -a <int>    the number of allowed backtracks, [180000]\n"
 	" -R <string> ref file, [NULL]\n"
         " -b <int>    beg block, [0]\n"
         " -e <int>    end block, [0]\n"
@@ -275,7 +276,7 @@ int main_decode(int argc, char **argv)
 	struct DECODEFILE *df;
 	struct ARTICLE *article;
 	char *pifn, *str, **reffn;
-	int c, n, k, nuss, mat, mis, gapo, gape, maxchange, maxdelete, mode, jump, upper, lower, raise, timeout, begblock, endblock, shift_or_not, ver, hrm, nblocks, i, j;
+	int c, n, k, nuss, mat, mis, gapo, gape, maxchange, maxdelete, mode, jump, upper, lower, raise, timeout, allowed, begblock, endblock, shift_or_not, ver, hrm, nblocks, i, j;
 	pifn = NULL;
 	n = 255;
 	k = 235;
@@ -292,13 +293,14 @@ int main_decode(int argc, char **argv)
 	lower = 32;
 	raise = 0;
 	timeout = 3600;
+	allowed = 2147483647;
 	reffn = calloc(1, sizeof(char *));
 	reffn[0] = NULL;
 	begblock = 0;
 	endblock = 0;
 	shift_or_not = 1;
 	ver = 0;
-	while((c = getopt(argc, argv, "hi:n:k:s:M:X:O:E:c:d:m:j:u:l:r:t:R:b:e:f:v")) != -1)
+	while((c = getopt(argc, argv, "hi:n:k:s:M:X:O:E:c:d:m:j:u:l:r:t:a:R:b:e:f:v")) != -1)
 	{
                 switch(c)
 		{
@@ -351,6 +353,9 @@ int main_decode(int argc, char **argv)
 			case 't':
                                 timeout = atoi(optarg);
                                 break;
+			case 'a':
+				allowed = atoi(optarg);
+				break;
 			case 'R':
                                 reffn[0] = optarg;
                                 break;
@@ -388,7 +393,7 @@ int main_decode(int argc, char **argv)
 	nblocks = i / n;
 	free_biosequence(seq);
         close_filereader(fr);
-	df = init_df(n, k, nuss, mat, mis, gapo, gape, maxchange, maxdelete, mode, jump, upper, lower, raise, timeout, begblock, endblock, ver, hrm, nblocks);
+	df = init_df(n, k, nuss, mat, mis, gapo, gape, maxchange, maxdelete, mode, jump, upper, lower, raise, timeout, allowed, begblock, endblock, ver, hrm, nblocks);
 	article = init_article(shift_or_not);
 	fr = open_all_filereader(1, argv + argc - 1, 0);
         seq = init_biosequence();
@@ -467,7 +472,7 @@ int main_decode(int argc, char **argv)
 		{
 			finish = clock();
 			time = (finish - start) / CLOCKS_PER_SEC;
-			fprintf(stderr, "end, success %.3f sec, crc64 times %d, shift times %d.\n", time, article->crc64_times, article->shift_times);
+			fprintf(stderr, "end, success %.3f sec, backtrack times %d/%d, crc64 times %d, shift times %d.\n", time, df->diff, df->number, article->crc64_times, article->shift_times);
 		}
 		else
 		{
@@ -476,13 +481,13 @@ int main_decode(int argc, char **argv)
 			{
 				finish = clock();
 				time = (finish - start) / CLOCKS_PER_SEC;
-				fprintf(stderr, "end, success %.3f sec, crc64 times %d, shift times %d.\n", time, article->crc64_times, article->shift_times);
+				fprintf(stderr, "end, success %.3f sec, backtrack times %d/%d, crc64 times %d, shift times %d.\n", time, df->diff, df->number, article->crc64_times, article->shift_times);
 			}
 			else
 			{
                         	finish = clock();
 				time = (finish - start) / CLOCKS_PER_SEC;
-                        	fprintf(stderr, "end, failure %.3f sec, crc64 times %d, shift times %d.\n", time, article->crc64_times, article->shift_times);
+                        	fprintf(stderr, "end, failure %.3f sec, backtrack times %d/%d, crc64 times %d, shift times %d.\n", time, df->diff, df->number, article->crc64_times, article->shift_times);
 			}
 		}
 	}
