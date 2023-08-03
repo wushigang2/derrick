@@ -7,7 +7,7 @@ int usage_encode()
 	" -i <string> pi file, [NULL]\n"
         " -n <int>    n of rs(n,k), n = 2^N - 1, N = 8/10/12/14/16, [255]\n"
         " -k <int>    k of rs(n,k), [235]\n"
-	" -s <int>    number of symbol(or call rs) per segment(or call block), [62]\n"
+	" -s <int>    number of symbol(or call rs) per segment(or call matrix), [62]\n"
         " -v          verbose\n"
 	"\n"
         "for example: use rs(1023,991) to encode a file\n"
@@ -238,13 +238,13 @@ int usage_decode()
 	" -i <string> pi file, [NULL]\n"
         " -n <int>    n of rs(n,k), n = 2^N - 1, N = 8/10/12/14/16, [255]\n"
         " -k <int>    k of rs(n,k), [235]\n"
-	" -s <int>    number of symbol(or call rs) per setment(or call block), [62]\n"
+	" -s <int>    number of symbol(or call rs) per setment(or call matrix), [62]\n"
 	" -M <int>    score for match, [2]\n"
 	" -X <int>    penalty for mismatch, [-6]\n"
 	" -O <int>    penalty for gap open, [-3]\n"
 	" -E <int>    penalty for gap extension, [-2]\n"
-	" -c <int>    max change number of rs soft decision, [0]\n"
-        " -d <int>    max delete number of rs soft decision, [0]\n"
+	" -c <int>    max change number of rs soft decision, [4]\n"
+        " -d <int>    max delete number of rs soft decision, [4]\n"
 	" -m <string> sequencing mode: illumina/pacbio/nanopore, [pacbio/nanopore]\n"
 	" -j <int>    jump mode of collision, [0]\n"
         "             0: jump to last exceed.\n"
@@ -285,15 +285,15 @@ int main_decode(int argc, char **argv)
 	mis = -6;
 	gapo = -3;
 	gape = -2;
-	maxchange = 0;
-	maxdelete = 0;
+	maxchange = 4;
+	maxdelete = 4;
 	mode = 3;
 	jump = 0;
 	upper = 32;
 	lower = 32;
 	raise = 0;
-	timeout = 3600;
-	allowed = 2147483647;
+	timeout = 6000;
+	allowed = 180000;
 	reffn = calloc(1, sizeof(char *));
 	reffn[0] = NULL;
 	begblock = 0;
