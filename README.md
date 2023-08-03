@@ -1,5 +1,5 @@
 # derrick
-derrick is a tool for DNA storage encode/decode.
+derrick is a software for DNA digital data storage. encoding involves converting digital files into DNA sequences, including randomization, adding CRC64 and RS codes, and then translating into DNA sequences; decoding utilizes soft decision decoding strategies to correct errors and decodes back to the original files.
 
 # Installation
 ```sh
@@ -18,7 +18,7 @@ commands:
  decode      decode a file.
 ```
 
-# encode a file
+# encode: convert a file into DNA sequences
 ```sh
 derrick encode
 ```
