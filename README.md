@@ -27,7 +27,7 @@ usage: derrick encode [options] <input file>
  -i <string> pi file, [NULL]
  -n <int>    n of rs(n,k), n = 2^N - 1, N = 8/10/12/14/16, [255]
  -k <int>    k of rs(n,k), [235]
- -s <int>    number of symbol(or call rs) per segment(or call block), [62]
+ -s <int>    number of symbol(or call rs) per segment(or call matrix), [62]
  -v          verbose.
  for example: use rs(1023,991) to encode a raw file, each block has 100 rs.
  derrick encode -i pi.txt -n 1023 -k 991 -s 100 <raw file>
@@ -42,13 +42,13 @@ usage: derrick decode [options] <input file>
  -i <string> pi file, [NULL]
  -n <int>    n of rs(n,k), n = 2^N - 1, N = 8/10/12/14/16, [255]
  -k <int>    k of rs(n,k), [235]
- -s <int>    number of symbol(or call rs) per setment(or call block), [62]
+ -s <int>    number of symbol(or call rs) per setment(or call matrix), [62]
  -M <int>    score for match, [2]
  -X <int>    penalty for mismatch, [-6]
  -O <int>    penalty for gap open, [-3]
  -E <int>    penalty for gap extension, [-2]
- -c <int>    max change number of rs soft decision, [0]
- -d <int>    max delete number of rs soft decision, [0]
+ -c <int>    max change number of rs soft decision, [4]
+ -d <int>    max delete number of rs soft decision, [4]
  -m <string> sequencing mode: illumina/pacbio/nanopore, [pacbio/nanopore]
  -j <int>    jump mode of collision, [0]
              0: jump to last exceed.
@@ -56,7 +56,8 @@ usage: derrick decode [options] <input file>
  -u <int>    search upper range of candidate, [255]
  -l <int>    search lower range of candidate, [32]
  -r <int>    search raise range of candidate, [0]
- -t <int>    how many seconds a block timeout, [3600]
+ -t <int>    how many seconds a block timeout, [6000]
+ -a <int>    the number of permitted backtracks, [180000]
  -R <string> ref file, [NULL]
  -b <int>    beg block, [0]
  -e <int>    end block, [0]
