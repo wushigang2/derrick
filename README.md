@@ -66,7 +66,7 @@ usage: derrick decode [options] <input file>
  for example: use rs(1023,991) to decode an encoded file, each block has 100 rs.
  derrick decode -i pi.txt -n 1023 -k 991 -s 100 <sequencing file>
 ```
-## Original fileS for _in silico_ tests 
+## Original files for _in silico_ tests 
 All  raw data is available at https://github.com/wushigang2/derrick/tree/main/data_files_insilico/
 
 # Contact
