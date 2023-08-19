@@ -1,4 +1,4 @@
-# Derrick
+# Users' Guide
 _derrick_ is a software program to designed for encoding and decoding arbitrary binary information to and from DNA sequences for DNA digital data storage. The encoding process involves converting digital files into DNA sequences, including randomization, adding CRC64 and RS codes, and then translating them into DNA sequences; decoding utilizes soft decision decoding strategies to correct errors and successfully decode the DNA sequences back to the original files.
 
 # Installation
