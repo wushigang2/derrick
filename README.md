@@ -1,7 +1,7 @@
-# Derrick
+## Derrick
 _derrick_ is a software program to designed for encoding and decoding arbitrary binary information to and from DNA sequences for DNA digital data storage. The encoding process involves converting digital files into DNA sequences, including randomization, adding CRC64 and RS codes, and then translating them into DNA sequences; decoding utilizes soft decision decoding strategies to correct errors and successfully decode the DNA sequences back to the original files.
 
-# Installation
+## Installation
 ```sh
 git clone https://github.com/wushigang2/derrick.git
 cd derrick
@@ -66,7 +66,7 @@ usage: derrick decode [options] <input file>
  for example: use rs(1023,991) to decode an encoded file, each block has 100 rs.
  derrick decode -i pi.txt -n 1023 -k 991 -s 100 <sequencing file>
 ```
-# Original file for _in silico_ tests 
+# Original fileS for _in silico_ tests 
 All  raw data is available at https://github.com/wushigang2/derrick/tree/main/data_files_insilico/
 
 # Contact
